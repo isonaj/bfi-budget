@@ -4,8 +4,9 @@ using System.Text;
 
 namespace BFI.Model
 {
-    public class BudgetEntry
+    public class BudgetEntry : IEntity<int>
     {
+        public int Id { get; }
         public bool Income { get; private set; }
         public string Description { get; private set; }
         public string Group { get; private set; }
