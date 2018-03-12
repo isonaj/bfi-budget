@@ -29,14 +29,12 @@ namespace BFI.Model
             decimal amount = Amount;
             switch (Period)
             {
-                case Period.Day: amount = amount * 365.25M; break;
                 case Period.Week: amount = amount * 52; break;
                 case Period.Month: amount = amount * 12; break;
             }
             amount = amount / PeriodQty;
             switch (period)
             {
-                case Period.Day: amount = amount / 365.25M; break;
                 case Period.Week: amount = amount / 52; break;
                 case Period.Month: amount = amount / 12; break;
             }

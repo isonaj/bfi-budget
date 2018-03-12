@@ -35,15 +35,5 @@ namespace BFI.Model.Tests
 
             Assert.AreEqual(-5M, budget.Total);
         }
-
-        [TestMethod]
-        public void CanSumIncomeAndExpensesTotal()
-        {
-            var budget = new Budget(Guid.NewGuid(), Period.Day);
-            budget.AddEntry(new BudgetEntry(true, "Test", "Group", 3M, 1, Period.Day));
-            budget.AddEntry(new BudgetEntry(false, "Test", "Group", 1M, 1, Period.Day));
-
-            Assert.AreEqual(2M, budget.Total);
-        }
     }
 }

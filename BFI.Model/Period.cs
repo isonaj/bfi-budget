@@ -2,7 +2,6 @@
 {
     public enum Period
     {
-        Day,
         Week,
         Month,
         Year
