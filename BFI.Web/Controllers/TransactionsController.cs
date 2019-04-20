@@ -10,7 +10,7 @@ namespace BFI.Web.Controllers
     [Route("api/[controller]")]
     public class TransactionsController : Controller
     {
-        List<Transaction> _transactions;
+        static List<Transaction> _transactions;
         // GET: api/<controller>
         [HttpGet]
         public ActionResult Get()
