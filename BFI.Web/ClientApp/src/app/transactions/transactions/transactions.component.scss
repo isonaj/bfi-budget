@@ -1,0 +1,31 @@
+$active: blue;
+$frame: gray;
+$red: red;
+
+.list-group {
+  .list-group-item {
+    background-color: white;
+    &.selected {
+      background-color: lighten($active, 15%);
+    }
+  }
+  .list-group.dragging {
+    .list-group-item.selected:not(.cdk-drag-placeholder) {
+      opacity: 0.2;
+      .list-group-item {
+        border-color: rgba($frame, 0.2);
+      }
+    }
+  }
+}
+.layout-item-drag-preview {
+  background: $red;
+  color: white;
+  font-weight: bold;
+  padding: 0.25em 0.5em 0.2em;
+  border-radius: 30px;
+  display: inline-block;
+}
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

@@ -7,21 +7,21 @@ namespace BFI.Domain.Extensions
 {
     public static class TransactionImporters
     {
-        public static IEnumerable<Transaction> ToTransactions(this Stream stream)
+        public static IEnumerable<Transaction> ToTransactions(this Stream stream, string name)
         {
             using (var reader = new StreamReader(stream))
             {
                 var header = reader.ReadLine();
                 if (header == "!Type:Bank")
-                    return LoadQifTransactions(reader);
+                    return LoadQifTransactions(reader, name);
                 else if (header == "OFXHEADER:100")
-                    return LoadOfxTransactions(reader);
+                    return LoadOfxTransactions(reader, name);
 
                 throw new Exception("Unknown file type");
             }
         }
 
-        private static IEnumerable<Transaction> LoadQifTransactions(StreamReader reader)
+        private static IEnumerable<Transaction> LoadQifTransactions(StreamReader reader, string name)
         {
             var result = new List<Transaction>();
 
@@ -41,6 +41,7 @@ namespace BFI.Domain.Extensions
                     case '^':
                         result.Add(new Transaction
                         {
+                            Account = name,
                             Date = DateTime.Parse(date),
                             Description = description,
                             Amount = Decimal.Parse(amount)
@@ -57,7 +58,7 @@ namespace BFI.Domain.Extensions
             return result;
         }
 
-        private static IEnumerable<Transaction> LoadOfxTransactions(StreamReader reader)
+        private static IEnumerable<Transaction> LoadOfxTransactions(StreamReader reader, string name)
         {
             var result = new List<Transaction>();
 
@@ -74,6 +75,7 @@ namespace BFI.Domain.Extensions
                 {
                     result.Add(new Transaction
                     {
+                        Account = name,
                         Date = DateTime.ParseExact(date.Substring(0, 8), "yyyyMMdd", null),
                         Description = description,
                         Amount = Decimal.Parse(amount)

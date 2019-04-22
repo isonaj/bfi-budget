@@ -17,6 +17,7 @@ import { BudgetComponent } from './budgets/budget/budget.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AuthGuard } from './services/auth.guard';
 import { SharedModule } from './shared/shared.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { SharedModule } from './shared/shared.module';
     HttpClientModule,
     FormsModule,
     AppRoutingModule,
-    SharedModule
+    SharedModule,
+    BrowserAnimationsModule
   ],
   providers: [
     AuthService,

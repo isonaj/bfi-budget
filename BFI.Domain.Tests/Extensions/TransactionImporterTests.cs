@@ -17,7 +17,7 @@ namespace BFI.Domain.Tests.Extensions
         {
             var stream = new MemoryStream(Encoding.UTF8.GetBytes("Random Data"));
 
-            Assert.Throws<Exception>(() => stream.ToTransactions());
+            Assert.Throws<Exception>(() => stream.ToTransactions("test"));
         }
 
         [Fact]
@@ -25,7 +25,7 @@ namespace BFI.Domain.Tests.Extensions
         {
             var stream = new MemoryStream(Encoding.UTF8.GetBytes("!Type:Bank\n"));
 
-            var txns = stream.ToTransactions();
+            var txns = stream.ToTransactions("test");
 
             Assert.Empty(txns);
         }
@@ -40,7 +40,7 @@ T-66.77
 ^
 "));
 
-            var txns = stream.ToTransactions().ToList();
+            var txns = stream.ToTransactions("test").ToList();
 
             Assert.Single(txns);
             Assert.Equal(new DateTime(2019, 4, 19), txns[0].Date);
@@ -62,7 +62,7 @@ T-77.66
 ^
 "));
 
-            var txns = stream.ToTransactions().ToList();
+            var txns = stream.ToTransactions("test").ToList();
 
             Assert.Equal(2, txns.Count);
             Assert.Equal(new DateTime(2019, 4, 19), txns[0].Date);
@@ -78,7 +78,7 @@ T-77.66
         {
             var stream = new MemoryStream(Encoding.UTF8.GetBytes("OFXHEADER:100\n"));
 
-            var txns = stream.ToTransactions();
+            var txns = stream.ToTransactions("test");
 
             Assert.Empty(txns);
         }
@@ -118,7 +118,7 @@ DATA:OFXSGML
 </STMTTRN>
 "));
 
-            var txns = stream.ToTransactions().ToList();
+            var txns = stream.ToTransactions("test").ToList();
 
             Assert.Single(txns);
             Assert.Equal(new DateTime(2019, 4, 19), txns[0].Date);

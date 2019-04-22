@@ -1,24 +1,48 @@
 
-<form (ngSubmit)="submit()" action="/api/transactions/upload" method="post" enctype="multipart/form-data">
+<form (ngSubmit)="submit($event)" method="post" enctype="multipart/form-data">
+  <input type="text" name="name" />
   <input type="file" name="file" />
   <input class="btn btn-primary" type="submit" value="Upload File" />
 </form>
+<div class="row" cdkDropListGroup>
 
-<table class="table table-condensed">
-  <thead>
-    <tr>
-      <th>Account</th>  
-      <th>Date</th>  
-      <th>Description</th>  
-      <th class="text-right">Amount</th>  
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let txn of transactions">
-      <td></td>
-      <td>{{txn.date|date:'dd/MM/yyyy'}}</td>
-      <td>{{txn.description}}</td>
-      <td class="text-right">{{txn.amount|currency:'USD'}}</td>
-    </tr>
-  </tbody>
-</table>
+  <div class="col-md-8">
+    <div class="card" cdkDropList [cdkDropListData]="transactions">
+      <div class="card-header">
+        <div class="float-left">Income</div>
+        <div class="float-right">$1200</div>
+      </div>
+      <div class="list-group list-group-flush">
+        <div class="list-group-item" *ngFor="let txn of transactions; let i = index;" cdkDrag
+          (click)="select($event, i)"
+          [class.selected]="txn.selected"
+          (cdkDragStarted)="onDragStart($event)">
+          <!--
+          <div class="layout-item-drag-preview" *cdkDragPreview>
+            {{ selections.length > 0 ? selections.length : 1 }}
+          </div>
+          -->
+          <div class="float-left">{{txn.description}}</div>
+          <div class="float-right">{{txn.amount|currency:'USD'}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header">
+        <div class="float-left">Categories</div>
+        <div class="float-right">$1200</div>
+      </div>
+
+      <div class="list-group list-group-flush">
+        <div class="list-group-item" *ngFor="let cat of categories" 
+          cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="cat.txns">
+
+          <div class="float-left">{{cat.name}} ({{cat.txns.length}})</div>
+          <div class="float-right">{{getTotal(cat)|currency:'USD'}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
