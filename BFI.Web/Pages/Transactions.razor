@@ -1,0 +1,72 @@
+﻿@page "/transactions";
+@inject HttpClient Http
+@using System.IO
+@using BlazorInputFile
+
+<h3>Transactions</h3>
+
+<form @onsubmit:preventDefault="true">
+    <InputFile OnChange="ImportTransactions" />
+    <button type="submit">Import Transactions</button>
+</form>
+
+@if (transactions == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Account</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var transaction in transactions)
+            {
+                <tr>
+                    <td>@transaction.Account</td>
+                    <td>@transaction.Date.ToShortDateString()</td>
+                    <td>@transaction.Description</td>
+                    <td>@transaction.Amount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Transaction[] transactions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        transactions = await Http.GetFromJsonAsync<Transaction[]>("api/transactions");
+    }
+
+    protected async Task ImportTransactions(IFileListEntry[] files)
+    {
+        var file = files.FirstOrDefault();
+        var ms = new MemoryStream();
+        await file.Data.CopyToAsync(ms);
+
+        var content = new MultipartFormDataContent {
+                { new ByteArrayContent(ms.GetBuffer()), "\"upload\"", file.Name }
+            };
+
+        await Http.PostAsync("api/transactions", content);
+
+    }
+
+    public class Transaction
+    {
+        public string Account { get; set; }
+        public DateTime Date { get; set; }
+        public string Description { get; set; }
+        public decimal Amount { get; set; }
+    }
+
+}
